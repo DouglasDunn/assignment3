@@ -30,4 +30,9 @@ class QueryBuilder
       die('Whoops, something went wrong.');
     }
   }
+
+  public function emptyTable($table) {
+    $statement = $this->pdo->prepare("DELETE FROM {$table}");
+    $statement->execute();
+  }
 }
