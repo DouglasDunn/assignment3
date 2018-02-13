@@ -8,14 +8,13 @@ class QueryBuilder
     $this->pdo = $pdo;
   }
 
-  // public function selectAll($table) {
-  //   $statement = $this->pdo->prepare("select * from {$table}");
-  //   $statement->execute();
-  //   return $statement->fetchAll(PDO::FETCH_CLASS);
-  // }
+  public function selectAll($table) {
+    $statement = $this->pdo->prepare("select * from {$table}");
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_CLASS);
+  }
 
   public function insert($table, $parameters) {
-    // var_dump(die('hi'));
     $sql = sprintf(
       'insert into %s (%s) values (%s)',
       $table,

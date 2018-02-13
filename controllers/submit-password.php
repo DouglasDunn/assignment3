@@ -1,22 +1,28 @@
 <?php
-//var_dump(die('hi'));
 
-$errorArray = array();
+$errorMessage = "";
 $index = 0;
 
 if (strlen($_POST['password']) < 8) {
-    $errorArray[$index++] = "Too short";
-    var_dump($errorArray);
+    $errorMessage = "Your password has to be more than 7 characters.";
 }
 
-echo $_POST['password'];
-echo "<br>";
-echo count($_POST['password']);
+$badPasswordsArray = $app['database']->selectAll('badPasswords');
 
-die();
+foreach ($badPasswordsArray as $badPassword) {
+    $castedBadPassword = (array) $badPassword;
 
-$app['database']->insert('badPasswords', [
-  'password' => $_POST['password']
-]);
-//var_dump(die('hi'));
-header('Location: /');
+    if ($castedBadPassword['password'] == $_POST['password']) {
+        $errorMessage = "Your password is a bad password.";
+    }
+}
+
+if ($errorMessage != "") {
+    require 'views/login-error.view.php';
+} else {
+    $app['database']->insert('passwords', [
+      'password' => $_POST['password']
+    ]);
+
+    require 'views/login-success.view.php';
+}
